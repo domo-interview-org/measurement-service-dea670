@@ -1,5 +1,6 @@
 package com.homecare.measurements.measurement;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,9 +25,8 @@ import com.homecare.measurements.patient.PatientRepository;
 /**
  * Written from docs/requirements/measurements.md before the endpoint exists.
  */
-@Disabled("Enable when POST /patients/{patientId}/measurements is implemented")
 @WebMvcTest
-@Import(PatientAccessService.class)
+@Import({PatientAccessService.class, MeasurementService.class})
 class MeasurementControllerTest {
 
     @Autowired
@@ -39,11 +38,15 @@ class MeasurementControllerTest {
     @MockBean
     CurrentUser currentUser;
 
+    @MockBean
+    MeasurementRepository measurementRepository;
+
     @BeforeEach
     void setUp() {
         when(patientRepository.findById("p-1"))
                 .thenReturn(Optional.of(new Patient("p-1", "Anna Muster", List.of("nurse-1"))));
         when(currentUser.userId()).thenReturn("nurse-1");
+        when(measurementRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     @Test
@@ -64,7 +67,7 @@ class MeasurementControllerTest {
                         .content("""
                                 {"type": "TEMPERATURE", "value": 370, "unit": "°C"}
                                 """))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated());
     }
 
     @Test
