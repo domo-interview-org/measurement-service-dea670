@@ -14,3 +14,9 @@ hour. Bill in started 5-minute units: 31 minutes bills as 35. Round the amount t
 | C | 30 min | 30 | 27.50 |
 | B | 33 min | 35 | 40.85 |
 | A | 61 min | 65 | 86.65 |
+
+## Step 2 · At-least-once delivery
+
+The broker delivers each event at least once: the same event can arrive twice. Never bill a visit
+twice. If saving the invoice line fails, the event must not be lost. If the notification fails,
+the visit must still be billed exactly once.
