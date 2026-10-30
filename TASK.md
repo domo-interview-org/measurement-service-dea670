@@ -20,3 +20,8 @@ hour. Bill in started 5-minute units: 31 minutes bills as 35. Round the amount t
 The broker delivers each event at least once: the same event can arrive twice. Never bill a visit
 twice. If saving the invoice line fails, the event must not be lost. If the notification fails,
 the visit must still be billed exactly once.
+
+## Step 3 · A customer report
+
+A customer reports that a night visit on 29 March 2026, from 01:30 to 03:30, was billed for 120
+minutes. The nurse was there for 60.
